@@ -17,8 +17,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -90,52 +95,63 @@ public class FXMLDocumentController implements Initializable  {
       }
       int toprow = 0;
       dataGrid.setGridLinesVisible(true);
-      dataGrid.setStyle("overflow:hidden;");
-      dataGrid.setMaxWidth(GridPane.USE_PREF_SIZE);
-      dataGrid.setMinWidth(GridPane.USE_PREF_SIZE);
-      Text t = new Text();
-      dataGrid.add(t, 0, toprow);
+      dataGrid.setHgap(5);
+      dataGrid.setVgap(5);
+      Label l = new Label();
 
       for (int i = 0; i < cols; i++) {
-        t = new Text(String.valueOf((char)(i+65)));
-        t.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        dataGrid.add(t, i+1, toprow);
+        l = new Label("Column order:");
+        dataGrid.add(l, i+1, toprow);
+        TextField tf = new TextField();
+        dataGrid.add(tf, i+1, toprow+1);
+        l = new Label("Column label:");
+        dataGrid.add(l, i+1, toprow+2);
+        tf = new TextField();
+        dataGrid.add(tf, i+1, toprow+3);
+        l = new Label("Column script:");
+        dataGrid.add(l, i+1, toprow+4);
+        TextArea ta = new TextArea();
+        ta.setWrapText(true);
+        ta.setPrefRowCount(10);
+        dataGrid.add(ta, i+1, toprow+5);
+      }
+      toprow += 6;
+      l = new Label();
+      dataGrid.add(l, 0, toprow);
+      double labelWidth = 130d;
+      for (int i = 0; i < cols; i++) {
+        l = new Label(String.valueOf((char)(i+65)));
+        l.setMinWidth(labelWidth);
+        l.setMaxWidth(labelWidth);
+        l.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        l.setAlignment(Pos.CENTER);
+        dataGrid.add(l, i+1, toprow);
       }
 
       cols = 0;
       for (int i = 0; i < s.getLastRowNum(); i++) {
         toprow++;
-        t = new Text(String.valueOf(i+1));
-        t.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        dataGrid.add(t, 0, toprow);
+        l = new Label(String.valueOf(i+1));
+        l.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        l.setAlignment(Pos.CENTER);
+        dataGrid.add(l, 0, toprow);
         Row r = s.getRow(i);
         if (r == null) continue;
         for (int j = 0; j < r.getLastCellNum(); j++) {
           Cell c = r.getCell(j, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-          t = new Text();
-          t.getStyleClass().add("data");
-          t.setStyle("overflow:hidden;font-size:12;display:block;width:70px;");
+          l = new Label();
           if (c != null) {
             CellType type = c.getCellTypeEnum();
             if (type.equals(CellType.STRING)) {
-              t.setText(c.getStringCellValue());
+              l.setText(c.getStringCellValue());
             }
             else if (type.equals(CellType.NUMERIC)) {
-              t.setText(Double.toString(c.getNumericCellValue()));
+              l.setText(Double.toString(c.getNumericCellValue()));
             }
           }
-          dataGrid.add(t, j+1, toprow);
+          dataGrid.add(l, j+1, toprow);
         }
       }
-
-
-//      String name = r.getCell(0).getStringCellValue();
-//      String shortName = r.getCell(1).getStringCellValue();
-//      String charName = r.getCell(2).getStringCellValue();
-//      String value = r.getCell(3).getStringCellValue();
-//      if ("".equals(value)) {
-//          continue;
-//      }
       wb.close();
       fis.close();
       return true;
