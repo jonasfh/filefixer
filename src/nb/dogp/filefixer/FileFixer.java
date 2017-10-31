@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package filefixer;
+package nb.dogp.filefixer;
 
 import java.net.URL;
 import java.util.logging.Level;
