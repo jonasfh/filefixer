@@ -13,23 +13,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.swing.JMenuItem;
@@ -97,43 +92,48 @@ public class FXMLDocumentController implements Initializable  {
       dataGrid.setGridLinesVisible(true);
       dataGrid.setHgap(5);
       dataGrid.setVgap(5);
-      Label l = new Label();
+      // set grid size constraints
+      ColumnConstraints cc = new ColumnConstraints (60);
+      dataGrid.getColumnConstraints().add(cc);
+      for (int i = 0; i < cols + 1; i++) {
+        cc = new ColumnConstraints (130);
+        dataGrid.getColumnConstraints().add(cc);
+      }
+      Label l = null;
 
-      for (int i = 0; i < cols; i++) {
+
+      for (int i = 0; i < cols + 1; i++) {
         l = new Label("Column order:");
-        dataGrid.add(l, i+1, toprow);
+        dataGrid.add(l, i + 1, toprow);
         TextField tf = new TextField();
-        dataGrid.add(tf, i+1, toprow+1);
+        dataGrid.add(tf, i + 1, toprow + 1);
         l = new Label("Column label:");
-        dataGrid.add(l, i+1, toprow+2);
+        dataGrid.add(l, i + 1, toprow + 2);
         tf = new TextField();
-        dataGrid.add(tf, i+1, toprow+3);
+        dataGrid.add(tf, i + 1, toprow + 3);
         l = new Label("Column script:");
-        dataGrid.add(l, i+1, toprow+4);
+        dataGrid.add(l, i + 1, toprow + 4);
         TextArea ta = new TextArea();
         ta.setWrapText(true);
-        ta.setPrefRowCount(10);
-        dataGrid.add(ta, i+1, toprow+5);
+        ta.setPrefRowCount(5);
+        dataGrid.add(ta, i + 1, toprow + 5);
       }
       toprow += 6;
       l = new Label();
       dataGrid.add(l, 0, toprow);
-      double labelWidth = 130d;
-      for (int i = 0; i < cols; i++) {
+      for (int i = 0; i < cols + 1; i++) {
         l = new Label(String.valueOf((char)(i+65)));
-        l.setMinWidth(labelWidth);
-        l.setMaxWidth(labelWidth);
         l.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         l.setAlignment(Pos.CENTER);
-        dataGrid.add(l, i+1, toprow);
+        dataGrid.add(l, i + 1, toprow);
       }
-
       cols = 0;
       for (int i = 0; i < s.getLastRowNum(); i++) {
         toprow++;
-        l = new Label(String.valueOf(i+1));
+        l = new Label(String.valueOf(i + 1));
         l.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         l.setAlignment(Pos.CENTER);
+//        l.setTextAlignment(TextAlignment.RIGHT);
         dataGrid.add(l, 0, toprow);
         Row r = s.getRow(i);
         if (r == null) continue;
