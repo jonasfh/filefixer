@@ -5,22 +5,24 @@
  */
 package nb.dogp.filefixer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.script.ScriptEngineManager;
 
 /**
  *
  * @author jonas
  */
-public class ExportSetup {
+public class ExportSetup implements Serializable {
   private String startExportScript = "";
   private int startRow = -1;
   private String endExportScript = "";
+  private String title = "";
   List<ColumnSetup> columns = new ArrayList<>();
   
-  public ExportSetup(int startRow) {
+  public ExportSetup(int startRow, String title) {
     this.startRow = startRow;
+    this.title = title;
   }
   
   public void addColumnSetup(
@@ -31,7 +33,7 @@ public class ExportSetup {
     );
   }
   
-  private class ColumnSetup implements Comparable<ColumnSetup>{
+  private class ColumnSetup implements Comparable<ColumnSetup>, Serializable{
     private int columnNo = -1;
     private int columnOrder = -1;
     private String columnLabel = "";
